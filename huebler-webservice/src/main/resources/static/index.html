@@ -1,26 +1,32 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Greeting Web Service Client</title>
+    <title>Location Web Service Client</title>
 </head>
 <body>
-<h1>Greeting Web Service Client</h1>
-<label for="name">Enter your name:</label>
-<input type="text" id="name" name="name" required>
+<h1>Location Web Service</h1>
+<label for="city">Enter Location:</label>
+<input type="text" id="city" required>
 <br><br>
-<button onclick="getGreeting()">Get Greeting</button>
-<div id="result"></div>
+<button onClick="getLocation()">get Location</button>
+<div id="result"></div> 
 <script>
-    function getGreeting() {
-        const nameInput = document.querySelector('#name');
-        const name = nameInput.value;
-        const url = http://localhost:8080/greeting?name=${encodeURIComponent(name)};
-        fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                const resultDiv = document.querySelector('#result');
-                resultDiv.textContent = data.message;
-            });
+    function getLocation() {
+        const cityInput = document.querySelector('#city');
+        const city = cityInput.value;
+        const url = 'http://localhost:8080/location?city=' + city;
+        
+        fetch(url, { method: 'GET' })
+        .then(response => response.json())
+        .then(data => {
+            const resultDiv = document.querySelector('#result');
+            
+            var linkUrl = "https://www.google.com/maps/place/" + data.latitude + "N+" + data.longitude + "E";
+            var linkText = "Google Maps";
+            var linkHtml = '<a href="'+ linkUrl +'" target="_blank">' + linkText + '</a>';
+            
+            resultDiv.innerHTML = "latitude: " + data.latitude + ", longitude: " + data.longitude + "<br>" + linkHtml;
+        });
     }
 </script>
 </body>
